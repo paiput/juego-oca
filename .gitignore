@@ -1,0 +1,5 @@
+*.dll
+*.dll.*
+*.exe
+lib
+include/SDL2
