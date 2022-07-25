@@ -17,14 +17,10 @@ int main(int argc, char* argv[])
 
   RenderWindow window("GAME v1.0", 1280, 720);
 
+  SDL_Texture* currentBackground = window.loadTexture("res/gfx/main-menu-bg.png");
   SDL_Texture* gooseTexture = window.loadTexture("res/gfx/goose.png");
 
-  Entity goose(Vector2i(0, 0), gooseTexture);
-  std::vector<Entity> geese = {
-    Entity(Vector2i(308, 0), gooseTexture), 
-    Entity(Vector2i(616, 0), gooseTexture),
-    Entity(Vector2i(924, 0), gooseTexture)
-  };
+  Entity goose(Vector2i(0, 0), Vector2i(308, 284), gooseTexture);
 
   bool gameRunning = true;
 
@@ -46,11 +42,8 @@ int main(int argc, char* argv[])
     }
 
     window.clear();
-    window.render(goose);
-    for (Entity& e : geese)
-    {
-      window.render(e);
-    }
+    window.render(currentBackground);
+    window.renderEntity(goose);
     window.display();
   }
 

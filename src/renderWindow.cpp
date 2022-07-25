@@ -39,7 +39,12 @@ void RenderWindow::clear()
   SDL_RenderClear(renderer);
 }
 
-void RenderWindow::render(Entity& p_entity)
+void RenderWindow::render(SDL_Texture* p_tex)
+{
+  SDL_RenderCopy(renderer, p_tex, NULL, NULL);
+}
+
+void RenderWindow::renderEntity(Entity& p_entity)
 {
   SDL_Rect src;
   src.x = p_entity.getCurrentFrame().x;
