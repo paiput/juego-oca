@@ -2,16 +2,17 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "GameMath.hpp"
+
 class Entity
 {
 public:
-  Entity(float p_x, float p_y, SDL_Texture* p_tex);
-  float getX();
-  float getY();
+  Entity(Vector2i p_pos, SDL_Texture* p_tex);
+  Vector2i& getPos();
   SDL_Texture* getTex();
   SDL_Rect getCurrentFrame();
 private:
-  double x, y;
+  Vector2i pos;
   SDL_Rect currentFrame;
   SDL_Texture* tex;
 };

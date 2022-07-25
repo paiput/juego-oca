@@ -3,10 +3,11 @@
 #include <iostream>
 
 #include "Entity.hpp"
+#include "GameMath.hpp"
 
 // Height and width must be the same for all textures
-Entity::Entity(float p_x, float p_y, SDL_Texture* p_tex)
-  :x(p_x), y(p_y), tex(p_tex)
+Entity::Entity(Vector2i p_pos, SDL_Texture* p_tex)
+  :pos(p_pos), tex(p_tex)
 {
   currentFrame.x = 0;
   currentFrame.y = 0;
@@ -14,14 +15,9 @@ Entity::Entity(float p_x, float p_y, SDL_Texture* p_tex)
   currentFrame.h = 284;
 }
 
-float Entity::getX()
+Vector2i& Entity::getPos()
 {
-  return x;
-}
-
-float Entity::getY()
-{
-  return y;
+  return pos;
 }
 
 SDL_Texture* Entity::getTex()
