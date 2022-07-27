@@ -2,7 +2,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include <Entity.hpp>
+#include "Entity.hpp"
+#include "GameMath.hpp"
 
 class RenderWindow 
 {
@@ -11,7 +12,7 @@ public:
   SDL_Texture* loadTexture(const char* p_filePath);
   void cleanUp();
   void clear();
-  void render(SDL_Texture* p_tex);
+  void render(SDL_Texture* p_tex, SDL_Rect* p_srcrect, SDL_Rect* p_dstrect);
   void renderEntity(Entity& p_entity);
   void display();
 private:

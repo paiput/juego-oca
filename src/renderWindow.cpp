@@ -4,6 +4,7 @@
 
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
+#include "GameMath.hpp"
 
 RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
   :window(nullptr), renderer(nullptr)
@@ -39,9 +40,9 @@ void RenderWindow::clear()
   SDL_RenderClear(renderer);
 }
 
-void RenderWindow::render(SDL_Texture* p_tex)
+void RenderWindow::render(SDL_Texture* p_tex, SDL_Rect* p_srcrect, SDL_Rect* p_dstrect)
 {
-  SDL_RenderCopy(renderer, p_tex, NULL, NULL);
+  SDL_RenderCopy(renderer, p_tex, p_srcrect, p_dstrect);
 }
 
 void RenderWindow::renderEntity(Entity& p_entity)
