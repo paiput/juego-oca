@@ -36,9 +36,12 @@ int main(int argc, char* argv[])
   SDL_Texture* exitButtonTex = IMG_LoadTexture(renderer, "res/gfx/exit-button.png");
 
   std::vector<Button> mainMenuButtons = {
-    Button(renderer, "play", playButtonTex, Vector2i(390, 275), Vector2i(500, 120)),
-    Button(renderer, "exit", exitButtonTex, Vector2i(390, 425), Vector2i(500, 120))
+    Button(renderer, "play", Vector2i(390, 275), Vector2i(500, 120)),
+    Button(renderer, "exit", Vector2i(390, 425), Vector2i(500, 120))
   };
+
+  mainMenuButtons[0].srcrect.y = 0;
+  mainMenuButtons[1].srcrect.y = 120;
 
   bool gameRunning = true;
 

@@ -8,7 +8,7 @@
 class Button
 {
 public:
-  Button(SDL_Renderer* p_renderer, const char* p_id, SDL_Texture* p_tex, Vector2i p_pos, Vector2i p_prop);
+  Button(SDL_Renderer* p_renderer, const char* p_id, Vector2i p_pos, Vector2i p_prop);
   void update(Mouse& p_mouse, SDL_Event p_event);
   void draw();
   const char* getId();
