@@ -29,7 +29,7 @@ SDL_Texture* Entity::getTex()
   return tex;
 }
 
-SDL_Rect Entity::getCurrentFrame()
+SDL_Rect& Entity::getCurrentFrame()
 {
   return currentFrame;
 }

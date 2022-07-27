@@ -11,7 +11,7 @@ public:
   Vector2i& getPos();
   Vector2i& getProp();
   SDL_Texture* getTex();
-  SDL_Rect getCurrentFrame();
+  SDL_Rect& getCurrentFrame();
 private:
   Vector2i pos;
   Vector2i prop;
