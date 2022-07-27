@@ -5,8 +5,7 @@
 #include "Entity.hpp"
 #include "GameMath.hpp"
 
-// Height and width must be the same for all textures
-Entity::Entity(Vector2i p_pos, Vector2i p_prop, SDL_Texture* p_tex)
+Entity::Entity(SDL_Texture* p_tex, Vector2i p_pos, Vector2i p_prop)
   :pos(p_pos), prop(p_prop), tex(p_tex)
 {
   currentFrame.x = 0;
