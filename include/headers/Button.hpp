@@ -3,14 +3,18 @@
 #include <SDL2/SDL_image.h>
 
 #include "GameMath.hpp"
+#include "Mouse.hpp"
 
-struct Button
+class Button
 {
 public:
-  Button(SDL_Texture* p_tex, Vector2i p_pos, Vector2i p_prop);
-  void update();
+  Button(SDL_Renderer* p_renderer, SDL_Texture* p_tex, Vector2i p_pos, Vector2i p_prop);
+  void update(Mouse& mouse);
   void draw();
-  SDL_Texture* tex;
   SDL_Rect srcrect, dstrect;
-  bool isSelected;
+  bool isSelected = false;
+  bool mouseIsOver = false;
+private:
+  SDL_Renderer* renderer;
+  SDL_Texture* tex;
 };
