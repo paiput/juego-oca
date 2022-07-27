@@ -6,6 +6,10 @@
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
 #include "GameMath.hpp"
+#include "Button.hpp"
+
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
 
 int main(int argc, char* argv[]) 
 {
@@ -15,12 +19,19 @@ int main(int argc, char* argv[])
   if (!(IMG_Init(IMG_INIT_PNG)))
     std::cout << "IMG_Init has failed. SDL_ERROR: " << SDL_GetError() << std::endl;
 
-  RenderWindow window("GAME v1.0", 1280, 720);
+  RenderWindow window("GAME v1.0", WINDOW_WIDTH, WINDOW_HEIGHT);
 
-  SDL_Texture* currentBackground = window.loadTexture("res/gfx/main-menu-bg.png");
+  SDL_Texture* mainBackgroundTexture = window.loadTexture("res/gfx/main-menu-bg.png");
   SDL_Texture* gooseTexture = window.loadTexture("res/gfx/goose.png");
+  SDL_Texture* playButton = window.loadTexture("res/gfx/play-button.png");
+  SDL_Texture* exitButton = window.loadTexture("res/gfx/exit-button.png");
+  
+  Entity currentBackground(mainBackgroundTexture, Vector2i(0, 0), Vector2i(WINDOW_WIDTH, WINDOW_HEIGHT));
 
-  Entity goose(Vector2i(0, 0), Vector2i(308, 284), gooseTexture);
+  std::vector<Button> mainMenuButtons = {
+    Button(playButton, Vector2i(390, 275), Vector2i(500, 120)),
+    Button(exitButton, Vector2i(390, 425), Vector2i(500, 120))
+  };
 
   bool gameRunning = true;
 
@@ -36,14 +47,17 @@ int main(int argc, char* argv[])
         gameRunning = false;
         break;
       case SDL_MOUSEMOTION:
-        std::cout << "x:" << event.motion.x << " y:" << event.motion.y << std::endl;
+        // std::cout << "x:" << event.motion.x << " y:" << event.motion.y << std::endl;
         break;
       }
     }
 
     window.clear();
-    window.render(currentBackground);
-    window.renderEntity(goose);
+    window.renderEntity(currentBackground);
+    for (Button& b : mainMenuButtons)
+    {
+      window.render(b.tex, &b.srcrect, &b.dstrect);
+    }
     window.display();
   }
 
