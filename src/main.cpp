@@ -3,10 +3,10 @@
 #include <iostream>
 #include <vector>
 
-#include "RenderWindow.hpp"
 #include "Entity.hpp"
 #include "GameMath.hpp"
 #include "Button.hpp"
+#include "Mouse.hpp"
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
@@ -19,18 +19,28 @@ int main(int argc, char* argv[])
   if (!(IMG_Init(IMG_INIT_PNG)))
     std::cout << "IMG_Init has failed. SDL_ERROR: " << SDL_GetError() << std::endl;
 
-  RenderWindow window("GAME v1.0", WINDOW_WIDTH, WINDOW_HEIGHT);
+  SDL_Window* window = SDL_CreateWindow(
+    "GAME v1.0", 
+    SDL_WINDOWPOS_UNDEFINED, 
+    SDL_WINDOWPOS_UNDEFINED, 
+    WINDOW_WIDTH, 
+    WINDOW_HEIGHT, 
+    SDL_WINDOW_SHOWN
+  );
+  SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-  SDL_Texture* mainBackgroundTexture = window.loadTexture("res/gfx/main-menu-bg.png");
-  SDL_Texture* gooseTexture = window.loadTexture("res/gfx/goose.png");
-  SDL_Texture* playButton = window.loadTexture("res/gfx/play-button.png");
-  SDL_Texture* exitButton = window.loadTexture("res/gfx/exit-button.png");
+  Mouse mouse(renderer);
+
+  SDL_Texture* mainBackgroundTexture = IMG_LoadTexture(renderer, "res/gfx/main-menu-bg.png");
+  SDL_Texture* gooseTexture = IMG_LoadTexture(renderer, "res/gfx/goose.png");
+  SDL_Texture* playButton = IMG_LoadTexture(renderer, "res/gfx/play-button.png");
+  SDL_Texture* exitButton = IMG_LoadTexture(renderer, "res/gfx/exit-button.png");
   
   Entity currentBackground(mainBackgroundTexture, Vector2i(0, 0), Vector2i(WINDOW_WIDTH, WINDOW_HEIGHT));
 
   std::vector<Button> mainMenuButtons = {
-    Button(playButton, Vector2i(390, 275), Vector2i(500, 120)),
-    Button(exitButton, Vector2i(390, 425), Vector2i(500, 120))
+    Button(renderer, playButton, Vector2i(390, 275), Vector2i(500, 120)),
+    Button(renderer, exitButton, Vector2i(390, 425), Vector2i(500, 120))
   };
 
   bool gameRunning = true;
@@ -39,6 +49,7 @@ int main(int argc, char* argv[])
 
   while (gameRunning)
   {
+    mouse.update();
     while (SDL_PollEvent(&event))
     {
       switch (event.type)
@@ -49,19 +60,27 @@ int main(int argc, char* argv[])
       case SDL_MOUSEMOTION:
         // std::cout << "x:" << event.motion.x << " y:" << event.motion.y << std::endl;
         break;
+      case SDL_MOUSEBUTTONUP:
+        std::cout << "click" << std::endl;
+        std::cout << "clicked in x:" << event.button.x << " and y:" << event.button.y << std::endl;
+        mainMenuButtons[0].update(mouse);
+        break;
       }
     }
 
-    window.clear();
-    window.renderEntity(currentBackground);
+    SDL_RenderClear(renderer);
+    
+    SDL_RenderCopy(renderer, currentBackground.getTex(), NULL, &currentBackground.getCurrentFrame());
     for (Button& b : mainMenuButtons)
     {
-      window.render(b.tex, &b.srcrect, &b.dstrect);
+      b.draw();
     }
-    window.display();
+    mouse.draw();
+
+    SDL_RenderPresent(renderer);
   }
 
-  window.cleanUp();
+  SDL_DestroyWindow(window);
   SDL_Quit();
 
   return 0;
