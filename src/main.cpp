@@ -31,16 +31,13 @@ int main(int argc, char* argv[])
 
   Mouse mouse(renderer);
 
-  SDL_Texture* mainBackgroundTexture = IMG_LoadTexture(renderer, "res/gfx/main-menu-bg.png");
-  SDL_Texture* gooseTexture = IMG_LoadTexture(renderer, "res/gfx/goose.png");
-  SDL_Texture* playButton = IMG_LoadTexture(renderer, "res/gfx/play-button.png");
-  SDL_Texture* exitButton = IMG_LoadTexture(renderer, "res/gfx/exit-button.png");
-  
-  Entity currentBackground(mainBackgroundTexture, Vector2i(0, 0), Vector2i(WINDOW_WIDTH, WINDOW_HEIGHT));
+  SDL_Texture* mainBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/main-menu-bg.png");
+  SDL_Texture* playButtonTex = IMG_LoadTexture(renderer, "res/gfx/play-button.png");
+  SDL_Texture* exitButtonTex = IMG_LoadTexture(renderer, "res/gfx/exit-button.png");
 
   std::vector<Button> mainMenuButtons = {
-    Button(renderer, playButton, Vector2i(390, 275), Vector2i(500, 120)),
-    Button(renderer, exitButton, Vector2i(390, 425), Vector2i(500, 120))
+    Button(renderer, "play", playButtonTex, Vector2i(390, 275), Vector2i(500, 120)),
+    Button(renderer, "exit", exitButtonTex, Vector2i(390, 425), Vector2i(500, 120))
   };
 
   bool gameRunning = true;
@@ -58,19 +55,23 @@ int main(int argc, char* argv[])
         gameRunning = false;
         break;
       case SDL_MOUSEMOTION:
-        // std::cout << "x:" << event.motion.x << " y:" << event.motion.y << std::endl;
+        for (Button& b : mainMenuButtons)
+        {
+          b.update(mouse, event);
+        }
         break;
       case SDL_MOUSEBUTTONUP:
-        std::cout << "click" << std::endl;
-        std::cout << "clicked in x:" << event.button.x << " and y:" << event.button.y << std::endl;
-        mainMenuButtons[0].update(mouse);
+        for (Button& b : mainMenuButtons)
+        {
+          b.update(mouse, event);
+        }
         break;
       }
     }
 
     SDL_RenderClear(renderer);
-    
-    SDL_RenderCopy(renderer, currentBackground.getTex(), NULL, &currentBackground.getCurrentFrame());
+
+    SDL_RenderCopy(renderer, mainBackgroundTex, NULL, NULL);
     for (Button& b : mainMenuButtons)
     {
       b.draw();
