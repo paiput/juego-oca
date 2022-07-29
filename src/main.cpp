@@ -35,13 +35,23 @@ int main(int argc, char* argv[])
   SDL_Texture* playButtonTex = IMG_LoadTexture(renderer, "res/gfx/play-button.png");
   SDL_Texture* exitButtonTex = IMG_LoadTexture(renderer, "res/gfx/exit-button.png");
 
+  bool showMainMenu = true;
   std::vector<Button> mainMenuButtons = {
     Button(renderer, "play", Vector2i(390, 275), Vector2i(500, 120)),
     Button(renderer, "exit", Vector2i(390, 425), Vector2i(500, 120))
   };
-
   mainMenuButtons[0].srcrect.y = 0;
   mainMenuButtons[1].srcrect.y = 120;
+  
+  bool showPlayerSelectionMenu = false;
+  std::vector<Button> playersSelectionMenuButtons = {
+    Button(renderer, "2-players", Vector2i(390, 150), Vector2i(500, 120)),
+    Button(renderer, "3-players", Vector2i(390, 300), Vector2i(500, 120)),
+    Button(renderer, "4-players", Vector2i(390, 450), Vector2i(500, 120))
+  };
+  playersSelectionMenuButtons[0].srcrect.y = 240;
+  playersSelectionMenuButtons[1].srcrect.y = 360;
+  playersSelectionMenuButtons[2].srcrect.y = 480;
 
   bool gameRunning = true;
 
@@ -58,15 +68,50 @@ int main(int argc, char* argv[])
         gameRunning = false;
         break;
       case SDL_MOUSEMOTION:
-        for (Button& b : mainMenuButtons)
+        if (showMainMenu)
         {
-          b.update(mouse, event);
+          for (Button& b : mainMenuButtons)
+          {
+            b.update(mouse, event);
+          }
+        }
+        if (showPlayerSelectionMenu)
+        {
+          for (Button& b : playersSelectionMenuButtons)
+          {
+            b.update(mouse, event);
+          }
         }
         break;
       case SDL_MOUSEBUTTONUP:
-        for (Button& b : mainMenuButtons)
+        if (showMainMenu)
         {
-          b.update(mouse, event);
+          for (Button& b : mainMenuButtons)
+          {
+            b.update(mouse, event);
+            if (strcmp(b.getName(), "exit") == 0 && b.isClicked)
+              gameRunning = false;
+            else if (strcmp(b.getName(), "play") == 0 && b.isClicked)
+            {
+              mainBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/players-selection-menu-bg.png");
+              
+              showMainMenu = false;
+              showPlayerSelectionMenu = true;
+            }
+          }
+        }
+        else if (showPlayerSelectionMenu)
+        {
+          for (Button& b : mainMenuButtons)
+          {
+            b.update(mouse, event);
+            if (strcmp(b.getName(), "2-players") == 0 && b.isClicked)
+              int a = 2;
+            else if (strcmp(b.getName(), "3-players") == 0 && b.isClicked)
+              int a = 2;
+            else if (strcmp(b.getName(), "4-players") == 0 && b.isClicked)
+              int a = 2;
+          }
         }
         break;
       }
@@ -75,9 +120,20 @@ int main(int argc, char* argv[])
     SDL_RenderClear(renderer);
 
     SDL_RenderCopy(renderer, mainBackgroundTex, NULL, NULL);
-    for (Button& b : mainMenuButtons)
+
+    if (showMainMenu)
     {
-      b.draw();
+      for (Button& b : mainMenuButtons)
+      {
+        b.draw();
+      }
+    } 
+    if (showPlayerSelectionMenu)
+    {
+      for (Button& b : playersSelectionMenuButtons)
+      {
+        b.draw();
+      }
     }
     mouse.draw();
 

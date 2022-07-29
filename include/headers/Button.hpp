@@ -8,15 +8,16 @@
 class Button
 {
 public:
-  Button(SDL_Renderer* p_renderer, const char* p_id, Vector2i p_pos, Vector2i p_prop);
+  Button(SDL_Renderer* p_renderer, const char* p_name, Vector2i p_pos, Vector2i p_prop);
   void update(Mouse& p_mouse, SDL_Event p_event);
   void draw();
-  const char* getId();
+  void cleanTexture();
+  const char* getName();
   SDL_Rect srcrect, dstrect;
-  bool isSelected = false;
+  bool isClicked = false;
   bool mouseIsOver = false;
 private:
   SDL_Renderer* renderer;
   SDL_Texture* tex;
-  const char* id;
+  const char* name;
 };

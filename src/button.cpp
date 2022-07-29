@@ -5,8 +5,8 @@
 #include "Button.hpp"
 #include "Mouse.hpp"
 
-Button::Button(SDL_Renderer* p_renderer, const char* p_id, Vector2i p_pos, Vector2i p_prop)
-  :renderer(p_renderer), id(p_id)
+Button::Button(SDL_Renderer* p_renderer, const char* p_name, Vector2i p_pos, Vector2i p_prop)
+  :renderer(p_renderer), name(p_name)
 {
   tex = IMG_LoadTexture(renderer, "res/gfx/buttons.png");
 
@@ -39,9 +39,8 @@ void Button::update(Mouse& p_mouse, SDL_Event p_event)
   }
   else if (p_event.type == SDL_MOUSEBUTTONUP)
   {
-    if (!hasIntersection) return;
-
-    std::cout << id << " button clicked" << std::endl;
+    if (hasIntersection) isClicked = true;
+    else isClicked = false;
   }
 }
 
@@ -50,7 +49,12 @@ void Button::draw()
   SDL_RenderCopy(renderer, tex, &srcrect, &dstrect);
 }
 
-const char* Button::getId()
+void Button::cleanTexture()
 {
-  return id;
+  tex = nullptr;
+}
+
+const char* Button::getName()
+{
+  return name;
 }
