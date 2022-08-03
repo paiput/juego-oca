@@ -9,6 +9,7 @@ class Player
 {
 public:
   Player(int p_nPlayer, Entity p_avatar);
+  void draw();
   int movePositions(int p_amount);
   int getPos();
   int getNPlayer();

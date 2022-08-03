@@ -8,6 +8,11 @@ Player::Player(int p_nPlayer, Entity p_avatar)
   :nPlayer(p_nPlayer), avatar(p_avatar), pos(0)
 {}
 
+void Player::draw()
+{
+  avatar.draw();
+}
+
 int Player::movePositions(int p_amount)
 {
   if (p_amount < 0 && abs(p_amount) > pos)
