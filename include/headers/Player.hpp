@@ -1,0 +1,19 @@
+#pragma once
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+
+#include "GameMath.hpp"
+#include "Entity.hpp"
+
+class Player
+{
+public:
+  Player(int p_nPlayer, Entity p_avatar);
+  int movePositions(int p_amount);
+  int getPos();
+  int getNPlayer();
+private:
+  int nPlayer;
+  Entity avatar;
+  int pos;
+};
