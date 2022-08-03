@@ -7,9 +7,13 @@
 #include "GameMath.hpp"
 #include "Button.hpp"
 #include "Mouse.hpp"
+#include "Board.hpp"
+#include "Player.hpp"
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
+
+extern Board* createBoard(SDL_Renderer* p_renderer, int p_playersAmount);
 
 int main(int argc, char* argv[]) 
 {
@@ -31,7 +35,7 @@ int main(int argc, char* argv[])
 
   Mouse mouse(renderer);
 
-  SDL_Texture* mainBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/main-menu-bg.png");
+  SDL_Texture* currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/main-menu-bg.png");
   SDL_Texture* playButtonTex = IMG_LoadTexture(renderer, "res/gfx/play-button.png");
   SDL_Texture* exitButtonTex = IMG_LoadTexture(renderer, "res/gfx/exit-button.png");
 
@@ -52,6 +56,18 @@ int main(int argc, char* argv[])
   playersSelectionMenuButtons[0].srcrect.y = 240;
   playersSelectionMenuButtons[1].srcrect.y = 360;
   playersSelectionMenuButtons[2].srcrect.y = 480;
+
+  Board* board = nullptr;
+  // std::cout << playerr->getPos() << std::endl;
+  Entity e(exitButtonTex, Vector2i(0, 0), Vector2i(100, 100));
+  
+  Player* p1 = nullptr;
+  p1 = new Player(5, e);
+  std::cout << "p1.getNPLayer() -> " << p1->getNPlayer() << std::endl;
+
+  Player playerr(1, e);
+  std::cout << playerr.getNPlayer() << std::endl;
+  // Player* playerr = new Player(3, &Entity(playButtonTex, Vector2i(0, 0), Vector2i(0, 0)));
 
   bool gameRunning = true;
 
@@ -93,7 +109,7 @@ int main(int argc, char* argv[])
               gameRunning = false;
             else if (strcmp(b.getName(), "play") == 0 && b.isClicked)
             {
-              mainBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/players-selection-menu-bg.png");
+              currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/players-selection-menu-bg.png");
               
               showMainMenu = false;
               showPlayerSelectionMenu = true;
@@ -102,16 +118,18 @@ int main(int argc, char* argv[])
         }
         else if (showPlayerSelectionMenu)
         {
-          for (Button& b : mainMenuButtons)
+          for (Button& b : playersSelectionMenuButtons)
           {
             b.update(mouse, event);
             if (strcmp(b.getName(), "2-players") == 0 && b.isClicked)
-              int a = 2;
+              board = createBoard(renderer, 2);
             else if (strcmp(b.getName(), "3-players") == 0 && b.isClicked)
-              int a = 2;
+              board = createBoard(renderer, 3);
             else if (strcmp(b.getName(), "4-players") == 0 && b.isClicked)
-              int a = 2;
+              board = createBoard(renderer, 4);
           }
+          currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/dice.png");
+          showPlayerSelectionMenu = false;
         }
         break;
       }
@@ -119,7 +137,7 @@ int main(int argc, char* argv[])
 
     SDL_RenderClear(renderer);
 
-    SDL_RenderCopy(renderer, mainBackgroundTex, NULL, NULL);
+    SDL_RenderCopy(renderer, currentBackgroundTex, NULL, NULL);
 
     if (showMainMenu)
     {
@@ -140,6 +158,7 @@ int main(int argc, char* argv[])
     SDL_RenderPresent(renderer);
   }
 
+  delete board;
   SDL_DestroyWindow(window);
   SDL_Quit();
 
