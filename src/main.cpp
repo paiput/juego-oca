@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 #include <vector>
+#include <string.h>
 
 #include "Entity.hpp"
 #include "GameMath.hpp"
@@ -58,15 +59,15 @@ int main(int argc, char* argv[])
   playersSelectionMenuButtons[2].srcrect.y = 480;
 
   Board* board = nullptr;
-  // std::cout << playerr->getPos() << std::endl;
-  Entity e(exitButtonTex, Vector2i(0, 0), Vector2i(100, 100));
   
-  Player* p1 = nullptr;
-  p1 = new Player(5, e);
-  std::cout << "p1.getNPLayer() -> " << p1->getNPlayer() << std::endl;
+  // Entity e(exitButtonTex, Vector2i(0, 0), Vector2i(100, 100));
+  
+  // Player* p1 = nullptr;
+  // p1 = new Player(5, e);
+  // std::cout << "p1.getNPLayer() -> " << p1->getNPlayer() << std::endl;
 
-  Player playerr(1, e);
-  std::cout << playerr.getNPlayer() << std::endl;
+  // Player playerr(1, e);
+  // std::cout << playerr.getNPlayer() << std::endl;
   // Player* playerr = new Player(3, &Entity(playButtonTex, Vector2i(0, 0), Vector2i(0, 0)));
 
   bool gameRunning = true;
@@ -128,7 +129,9 @@ int main(int argc, char* argv[])
             else if (strcmp(b.getName(), "4-players") == 0 && b.isClicked)
               board = createBoard(renderer, 4);
           }
+          std::cout << "cantidad de jugadores: " << board->getAmountOfPlayers() << std::endl;
           currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/dice.png");
+          board->draw();
           showPlayerSelectionMenu = false;
         }
         break;

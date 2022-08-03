@@ -10,6 +10,7 @@ class Board
 public:
   Board(SDL_Renderer* p_renderer, int p_playersAmount);
   void draw();
+  int getAmountOfPlayers();
 private:
   SDL_Renderer* renderer;
   std::vector<Player> players;
