@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <string.h>
+#include <time.h>
 
 #include "Entity.hpp"
 #include "GameMath.hpp"
@@ -10,11 +11,21 @@
 #include "Mouse.hpp"
 #include "Board.hpp"
 #include "Player.hpp"
+#include "Dice.hpp"
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
 extern Board* createBoard(SDL_Renderer* p_renderer, int p_playersAmount);
+
+extern SDL_Texture* getAreaTexture(SDL_Renderer* renderer, SDL_Rect rect, SDL_Texture* tex)
+{
+  SDL_Texture* result = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, rect.w, rect.h);
+  SDL_SetRenderTarget(renderer, result);
+  SDL_RenderCopy(renderer, tex, &rect, NULL);
+  SDL_SetRenderTarget(renderer, NULL);  
+  return result;
+}
 
 int main(int argc, char* argv[]) 
 {
@@ -33,6 +44,8 @@ int main(int argc, char* argv[])
     SDL_WINDOW_SHOWN
   );
   SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+  srand(time(NULL));
 
   Mouse mouse(renderer);
 
@@ -57,6 +70,8 @@ int main(int argc, char* argv[])
   playersSelectionMenuButtons[0].srcrect.y = 240;
   playersSelectionMenuButtons[1].srcrect.y = 360;
   playersSelectionMenuButtons[2].srcrect.y = 480;
+
+  Dice dice(renderer, Vector2i(200, 200), Vector2i(125, 125));
 
   Board* board = nullptr;
   
@@ -130,9 +145,18 @@ int main(int argc, char* argv[])
               board = createBoard(renderer, 4);
           }
           std::cout << "cantidad de jugadores: " << board->getAmountOfPlayers() << std::endl;
-          currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/dice.png");
-          board->draw();
+          currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/board-bg.png");
           showPlayerSelectionMenu = false;
+        }
+        else if (board != nullptr)
+        {
+          dice.update(mouse, event);
+          std::cout << "ya puede tirar dado" << std::endl;
+          if (dice.isClicked)
+          {
+            std::cout << "dado tirado" << std::endl;
+            dice.roll();
+          }
         }
         break;
       }
@@ -155,6 +179,12 @@ int main(int argc, char* argv[])
       {
         b.draw();
       }
+    }
+    if (board != nullptr)
+    {
+      // std::cout << "render board" << std::endl;
+      board->draw();
+      dice.draw();
     }
     mouse.draw();
 
