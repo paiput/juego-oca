@@ -3,6 +3,7 @@
 *.exe
 lib
 include/SDL2
+.vscode
 
 # ignore
 include/headers/RenderWindow.hpp
