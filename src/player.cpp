@@ -13,13 +13,12 @@ void Player::draw()
   avatar.draw();
 }
 
-int Player::movePositions(int p_amount)
+void Player::movePositions(int p_amount)
 {
   if (p_amount < 0 && abs(p_amount) > pos)
     pos = 0;
   else
     pos += p_amount;
-  return pos;
 }
 
 int Player::getPos()

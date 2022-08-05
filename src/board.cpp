@@ -38,13 +38,31 @@ void Board::draw()
   }
 }
 
+void Board::changePlayerTurn()
+{
+  if (playerTurn+1 > players.size())
+    playerTurn = 1;
+  else
+    playerTurn += 1;
+}
+
 int Board::getAmountOfPlayers()
 {
   return players.size();
+}
+
+int Board::getPlayerTurn()
+{
+  return playerTurn - 1;
 }
 
 extern Board* createBoard(SDL_Renderer* p_renderer, int p_playersAmount)
 {
   Board *board = new Board(p_renderer, p_playersAmount);
   return board;
+}
+
+std::vector<Player>& Board::getPlayers()
+{
+  return players;
 }

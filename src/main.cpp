@@ -71,9 +71,10 @@ int main(int argc, char* argv[])
   playersSelectionMenuButtons[1].srcrect.y = 360;
   playersSelectionMenuButtons[2].srcrect.y = 480;
 
-  Dice dice(renderer, Vector2i(200, 200), Vector2i(125, 125));
+  Dice dice(renderer, Vector2i(WINDOW_WIDTH - 135, 10), Vector2i(125, 125));
 
   Board* board = nullptr;
+  std::vector<Player> players;
   
   // Entity e(exitButtonTex, Vector2i(0, 0), Vector2i(100, 100));
   
@@ -145,17 +146,20 @@ int main(int argc, char* argv[])
               board = createBoard(renderer, 4);
           }
           std::cout << "cantidad de jugadores: " << board->getAmountOfPlayers() << std::endl;
+          players = board->getPlayers();
           currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/board-bg.png");
           showPlayerSelectionMenu = false;
         }
         else if (board != nullptr)
         {
           dice.update(mouse, event);
-          std::cout << "ya puede tirar dado" << std::endl;
           if (dice.isClicked)
           {
-            std::cout << "dado tirado" << std::endl;
-            dice.roll();
+            int diceResult = dice.roll();
+            players.at(board->getPlayerTurn()).movePositions(diceResult);
+            std::cout << "jugador " << players.at(board->getPlayerTurn()).getNPlayer() << " se mueve " << diceResult << " casilleros" << std::endl;
+            std::cout << "jugador " << players.at(board->getPlayerTurn()).getNPlayer() << " esta en " << players.at(board->getPlayerTurn()).getPos() << std::endl; 
+            board->changePlayerTurn();
           }
         }
         break;
@@ -182,7 +186,6 @@ int main(int argc, char* argv[])
     }
     if (board != nullptr)
     {
-      // std::cout << "render board" << std::endl;
       board->draw();
       dice.draw();
     }
