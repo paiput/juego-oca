@@ -16,8 +16,6 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-extern Board* createBoard(SDL_Renderer* p_renderer, int p_playersAmount);
-
 extern SDL_Texture* getAreaTexture(SDL_Renderer* renderer, SDL_Rect rect, SDL_Texture* tex)
 {
   SDL_Texture* result = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, rect.w, rect.h);
@@ -72,20 +70,8 @@ int main(int argc, char* argv[])
   playersSelectionMenuButtons[2].srcrect.y = 480;
 
   Dice dice(renderer, Vector2i(WINDOW_WIDTH - 135, 10), Vector2i(125, 125));
-
-  Board* board = nullptr;
+  Board board;
   std::vector<Player> players;
-  
-  // Entity e(exitButtonTex, Vector2i(0, 0), Vector2i(100, 100));
-  
-  // Player* p1 = nullptr;
-  // p1 = new Player(5, e);
-  // std::cout << "p1.getNPLayer() -> " << p1->getNPlayer() << std::endl;
-
-  // Player playerr(1, e);
-  // std::cout << playerr.getNPlayer() << std::endl;
-  // Player* playerr = new Player(3, &Entity(playButtonTex, Vector2i(0, 0), Vector2i(0, 0)));
-
   bool gameRunning = true;
 
   SDL_Event event;
@@ -139,27 +125,24 @@ int main(int argc, char* argv[])
           {
             b.update(mouse, event);
             if (strcmp(b.getName(), "2-players") == 0 && b.isClicked)
-              board = createBoard(renderer, 2);
+              board = Board(renderer, 2);
             else if (strcmp(b.getName(), "3-players") == 0 && b.isClicked)
-              board = createBoard(renderer, 3);
+              board = Board(renderer, 3);
             else if (strcmp(b.getName(), "4-players") == 0 && b.isClicked)
-              board = createBoard(renderer, 4);
+              board = Board(renderer, 4);
           }
-          std::cout << "cantidad de jugadores: " << board->getAmountOfPlayers() << std::endl;
-          players = board->getPlayers();
-          currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/board-bg.png");
+          players = board.getPlayers();
+          currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/board3.png");
           showPlayerSelectionMenu = false;
         }
-        else if (board != nullptr)
+        else if (board.isReady())
         {
           dice.update(mouse, event);
           if (dice.isClicked)
           {
             int diceResult = dice.roll();
-            players.at(board->getPlayerTurn()).movePositions(diceResult);
-            std::cout << "jugador " << players.at(board->getPlayerTurn()).getNPlayer() << " se mueve " << diceResult << " casilleros" << std::endl;
-            std::cout << "jugador " << players.at(board->getPlayerTurn()).getNPlayer() << " esta en " << players.at(board->getPlayerTurn()).getPos() << std::endl; 
-            board->changePlayerTurn();
+            players.at(board.getPlayerTurn()).movePositions(diceResult);
+            board.changePlayerTurn();
           }
         }
         break;
@@ -184,9 +167,12 @@ int main(int argc, char* argv[])
         b.draw();
       }
     }
-    if (board != nullptr)
+    if (board.isReady())
     {
-      board->draw();
+      for (Player& p : players)
+      {
+        p.draw();
+      }
       dice.draw();
     }
     mouse.draw();
@@ -194,7 +180,6 @@ int main(int argc, char* argv[])
     SDL_RenderPresent(renderer);
   }
 
-  delete board;
   SDL_DestroyWindow(window);
   SDL_Quit();
 

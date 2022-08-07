@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <iostream>
 
 #include "Player.hpp"
 #include "GameMath.hpp"
@@ -19,6 +20,8 @@ void Player::movePositions(int p_amount)
     pos = 0;
   else
     pos += p_amount;
+  std::cout << "player " << nPlayer << " is in position " << pos << std::endl; 
+  avatar.updatePos(pos);
 }
 
 int Player::getPos()
@@ -29,4 +32,9 @@ int Player::getPos()
 int Player::getNPlayer()
 {
   return nPlayer;
+}
+
+Entity& Player::getAvatar()
+{
+  return avatar;
 }

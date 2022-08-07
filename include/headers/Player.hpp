@@ -13,6 +13,7 @@ public:
   void movePositions(int p_amount);
   int getPos();
   int getNPlayer();
+  Entity& getAvatar();
 private:
   int nPlayer;
   Entity avatar;

@@ -19,6 +19,30 @@ void Entity::draw()
   SDL_RenderCopy(renderer, tex, NULL, &currentFrame);
 }
 
+void Entity::updatePos(int p_pos)
+{
+  if (p_pos < 8)
+  {
+    currentFrame.x = 287 + 75 * p_pos + 15 * p_pos;
+  }
+  else if (p_pos < 15)
+  {
+    currentFrame.x = 287 + 75 * 7 + 15 * 7; 
+    currentFrame.y = 14 + 75 * (p_pos % 8) + 15 * (p_pos % 8);
+  }
+  else if (p_pos < 22)
+  {
+    currentFrame.x = (287 + 75 * 7 + 15 * 7) - 75 * (p_pos % 8) - 15 * (p_pos % 8);
+    currentFrame.y = 14 + 75 * 7 + 15 * 7;
+  }
+  else if (p_pos < 29)
+  {
+    currentFrame.x = 287;
+    currentFrame.y = (14 + 75 * 7 + 15 * 7) - 75 * (p_pos % 8) - 15 * (p_pos % 8);
+  }
+  SDL_RenderCopy(renderer, tex, NULL, &currentFrame);
+}
+
 Vector2i& Entity::getPos()
 {
   return pos;
