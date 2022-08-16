@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 
+#include "Square.hpp"
 #include "Board.hpp"
 #include "Player.hpp"
 #include "Entity.hpp"
@@ -15,6 +16,21 @@ Board::Board()
 Board::Board(SDL_Renderer* p_renderer, int p_playersAmount)
   :renderer(p_renderer), ready(true)
 {
+  const int SQUARES = 64;
+  const int MARGIN_X = 294;
+  const int MARGIN_Y = 7;
+
+  int xt = MARGIN_X, y = MARGIN_Y, a = 0;
+
+  for (int i=0; i<SQUARES; i++)
+  {
+    squares[i] = Square(renderer, i+1, a, Vector2i(xt, y));
+    xt += 90;
+    if (xt >= 986) { xt = MARGIN_X; y += 90; }
+    if (a == 1) a = -1;
+    else a += 1;
+  }
+
   SDL_Texture* playersTex = IMG_LoadTexture(renderer, "res/gfx/players.png");
   SDL_Rect imgPartRect;
   imgPartRect.x = 0;
@@ -33,7 +49,12 @@ Board::Board(SDL_Renderer* p_renderer, int p_playersAmount)
 }
 
 void Board::draw()
-{}
+{
+  for (int i=0; i<64; i++)
+  {
+    squares[i].draw();
+  }
+}
 
 void Board::changePlayerTurn()
 {

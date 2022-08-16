@@ -18,9 +18,11 @@ void Player::movePositions(int p_amount)
 {
   if (p_amount < 0 && abs(p_amount) > pos)
     pos = 0;
-  else
+  else if (p_amount >= 63)
     pos += p_amount;
-  std::cout << "player " << nPlayer << " is in position " << pos << std::endl; 
+  else 
+    std::cout << "el jugador " << nPlayer << " llego al final" << std::endl;
+  std::cout << "jugador " << nPlayer << " esta en posicion " << pos << std::endl; 
   avatar.updatePos(pos);
 }
 

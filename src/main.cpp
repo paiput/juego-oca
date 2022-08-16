@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
               board = Board(renderer, 4);
           }
           players = board.getPlayers();
-          currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/board3.png");
+          currentBackgroundTex = IMG_LoadTexture(renderer, "res/gfx/board-3.png");
           showPlayerSelectionMenu = false;
         }
         else if (board.isReady())
@@ -169,6 +169,7 @@ int main(int argc, char* argv[])
     }
     if (board.isReady())
     {
+      board.draw();
       for (Player& p : players)
       {
         p.draw();

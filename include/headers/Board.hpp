@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Player.hpp"
+#include "Square.hpp"
 
 class Board
 {
@@ -21,4 +22,5 @@ private:
   int playerTurn = 1;
   SDL_Renderer* renderer;
   std::vector<Player> players;
+  Square squares[64];
 };

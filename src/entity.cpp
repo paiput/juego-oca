@@ -21,25 +21,14 @@ void Entity::draw()
 
 void Entity::updatePos(int p_pos)
 {
-  if (p_pos < 8)
-  {
-    currentFrame.x = 287 + 75 * p_pos + 15 * p_pos;
-  }
-  else if (p_pos < 15)
-  {
-    currentFrame.x = 287 + 75 * 7 + 15 * 7; 
-    currentFrame.y = 14 + 75 * (p_pos % 8) + 15 * (p_pos % 8);
-  }
-  else if (p_pos < 22)
-  {
-    currentFrame.x = (287 + 75 * 7 + 15 * 7) - 75 * (p_pos % 8) - 15 * (p_pos % 8);
-    currentFrame.y = 14 + 75 * 7 + 15 * 7;
-  }
-  else if (p_pos < 29)
-  {
-    currentFrame.x = 287;
-    currentFrame.y = (14 + 75 * 7 + 15 * 7) - 75 * (p_pos % 8) - 15 * (p_pos % 8);
-  }
+  const int SQUARE_SIZE = 75;
+  const int MARGIN_SQUARE = 15;
+  const int MARGIN_X = 294;
+  const int MARGIN_Y = 7;
+
+  currentFrame.x = MARGIN_X + (p_pos % 8) * (SQUARE_SIZE + MARGIN_SQUARE);
+  currentFrame.y = MARGIN_Y + (p_pos / 8) * (SQUARE_SIZE + MARGIN_SQUARE);
+
   SDL_RenderCopy(renderer, tex, NULL, &currentFrame);
 }
 
